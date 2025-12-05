@@ -8,9 +8,7 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    ResponsiveContainer,
-    Cell
-} from 'recharts';
+    ResponsiveContainer} from 'recharts';
 import {
     TrendingUp,
     Coins,
