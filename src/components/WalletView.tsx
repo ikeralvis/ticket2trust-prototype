@@ -1,23 +1,17 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { TicketCard } from './TicketCard';
-import { showToast } from './Toast';
 import { QRCodeSVG } from 'qrcode.react';
 import {
     Wallet,
-    Plus,
     Receipt,
     Copy,
     TrendingUp
 } from 'lucide-react';
+import { showToast } from './Toast';
 
 export const WalletView: React.FC = () => {
-    const { user, tickets, addTicket } = useApp();
-
-    const handleAddTicket = () => {
-        addTicket();
-        showToast('¡Nueva compra registrada! +10% en tokens', 'success');
-    };
+    const { user, tickets } = useApp();
 
     const copyQR = () => {
         navigator.clipboard.writeText(user.qrCode);
@@ -103,17 +97,6 @@ export const WalletView: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Add Ticket Button */}
-                    <button
-                        onClick={handleAddTicket}
-                        className="w-full mb-4 py-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-gray-400 text-gray-500 hover:text-gray-700 transition-all duration-200 flex items-center justify-center gap-2 group"
-                    >
-                        <div className="p-2 rounded-lg bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                            <Plus className="w-5 h-5" />
-                        </div>
-                        <span className="font-medium">Simular Compra en TPV</span>
-                    </button>
-
                     {/* Tickets List */}
                     <div className="space-y-3">
                         {tickets.map(ticket => (
@@ -125,7 +108,7 @@ export const WalletView: React.FC = () => {
                         <div className="text-center py-12">
                             <Receipt className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                             <p className="text-gray-500">No tienes tickets aún</p>
-                            <p className="text-gray-400 text-sm">Simula una compra para empezar</p>
+                            <p className="text-gray-400 text-sm">Tus compras aparecerán aquí</p>
                         </div>
                     )}
                 </section>

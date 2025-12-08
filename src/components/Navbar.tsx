@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Wallet, LayoutDashboard } from 'lucide-react';
+import { Wallet, LayoutDashboard, Store } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
     const { viewMode, setViewMode, user } = useApp();
@@ -41,6 +41,16 @@ export const Navbar: React.FC = () => {
                         >
                             <LayoutDashboard className="w-4 h-4" />
                             <span className="hidden sm:inline">Dashboard</span>
+                        </button>
+                        <button
+                            onClick={() => setViewMode('store')}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${viewMode === 'store'
+                                ? 'bg-black text-white shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900'
+                                }`}
+                        >
+                            <Store className="w-4 h-4" />
+                            <span className="hidden sm:inline">Tienda TPV</span>
                         </button>
                     </div>
 

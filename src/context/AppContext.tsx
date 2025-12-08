@@ -4,8 +4,8 @@ import { initialTickets, initialCampaigns, generateDID, generateQRCode, storePro
 
 interface AppContextType {
     // View mode
-    viewMode: 'wallet' | 'dashboard';
-    setViewMode: (mode: 'wallet' | 'dashboard') => void;
+    viewMode: 'wallet' | 'dashboard' | 'store';
+    setViewMode: (mode: 'wallet' | 'dashboard' | 'store') => void;
 
     // User state
     user: UserState;
@@ -13,6 +13,7 @@ interface AppContextType {
     // Tickets
     tickets: Ticket[];
     addTicket: () => void;
+    processStorePayment: (store: string, product: string, price: number) => void;
 
     // Campaigns
     campaigns: Campaign[];
@@ -32,7 +33,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [viewMode, setViewMode] = useState<'wallet' | 'dashboard'>('wallet');
+    const [viewMode, setViewMode] = useState<'wallet' | 'dashboard' | 'store'>('wallet');
     const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
     const [campaigns, setCampaigns] = useState<Campaign[]>(initialCampaigns);
     const [tokenBalance, setTokenBalance] = useState(125);
@@ -64,6 +65,28 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             redeemed: false,
             location: randomLocation,
             category: getProductCategory(randomProduct),
+            tokensEarned
+        };
+
+        // Add tokens automatically (10% of purchase)
+        setTokenBalance(prev => prev + tokensEarned);
+        setTickets(prev => [newTicket, ...prev]);
+    };
+
+    const processStorePayment = (store: string, product: string, price: number) => {
+        const locations = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao'];
+        const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+        const tokensEarned = calculateTokens(price);
+
+        const newTicket: Ticket = {
+            id: Date.now(),
+            store,
+            product,
+            price,
+            date: new Date().toISOString().split('T')[0],
+            redeemed: false,
+            location: randomLocation,
+            category: getProductCategory(product),
             tokensEarned
         };
 
@@ -149,6 +172,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             user,
             tickets,
             addTicket,
+            processStorePayment,
             campaigns,
             addCampaign,
             validateCampaign,
